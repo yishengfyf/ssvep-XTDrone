@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/outdoor3.world"/>
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world)"/>
+        <arg name="gui" value="true"/>
+        <arg name="paused" value="false"/>
+        <arg name="verbose" value="false"/>
+    </include>
+
+    <node name="spawn_iris_puppet" pkg="gazebo_ros" type="spawn_model"
+          args="-file $(find mavlink_sitl_gazebo)/models/iris/iris.sdf -sdf -model iris_0 -x 0 -y 0 -z 1"
+          output="screen" />
+</launch>
