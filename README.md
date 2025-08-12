@@ -27,6 +27,7 @@ XTDrone/
         ├── bci_main.py           # 【用户端核心】SSVEP界面、脑电回放、解码与指令发送
         ├── pose_updater.py       # 【用户端核心】接收UDP位姿并更新木偶无人机
         ├── budp_sender.py        # BUDP指令发送器的类定义
+        ├── ssvep_sender.py       # SSVEP刺激信号生成器的类定义
         └── test/                 # 存放各类测试脚本
 ```
 
