@@ -19,7 +19,7 @@ import numpy as np
 from scipy.io import loadmat
 from scipy.linalg import qr, svd, pinv
 from budp_sender import BUDPTestSender
-from ssvep_sender import gen_ref_sig, SimpleCCA
+from scripts.test.ssvep_sender import gen_ref_sig, SimpleCCA
 
 # --- 禁用Pygame音频模块 ---
 os.environ['SDL_AUDIODRIVER'] = 'dummy'
