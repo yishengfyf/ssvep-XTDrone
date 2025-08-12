@@ -33,7 +33,7 @@ XTDrone/
 
 ## 3\. 使用指南
 
-本指南提供两种测试模式：**A) 单机双容器测试** 和 **B) 双物理机部署**。在使用时，请将**bci文件夹**放置于/XTDrone目录下，将**outdoor3_visualizer.launch**文件放置于/PX4_Firmware/launch目录下，并确保/PX4_Firmware与/XTDrone处于**同一层级**。
+本指南提供两种测试模式：**A) 单机双容器测试** 和 **B) 双物理机部署**。在使用时，请将仓库克隆到**新建的/XTDrone/bci目录**下，并将项目内的**outdoor3_visualizer.launch**文件剪贴至/PX4_Firmware/launch目录下，同时确保/PX4_Firmware与/XTDrone处于**同一层级**。
 
 -----
 
