@@ -21,10 +21,10 @@ if __name__ == "__main__":
         ("cd ~/PX4_Firmware && roslaunch px4 outdoor3_visualizer.launch", 10.0),
 
         # 终端2: 启动“木偶师”，接收UDP状态并更新姿态
-        ("cd ~/XTDrone/bci/scripts && python3 pose_updater.py", 2.0),
+        ("cd ~/XTDrone/bci/ssvep-XTDrone-k/scripts && python3 pose_updater.py", 2.0),
 
         # 终端3: 启动刺激界面及脑电波模拟的指令发送器
-        ("cd ~/XTDrone/bci/scripts && python3 bci_main.py", 0.0)
+        ("cd ~/XTDrone/bci/ssvep-XTDrone-k/scripts && python3 bci_main.py", 0.0)
     ]
 
     print("🚀 正在启动 PC2 (木偶/BCI终端) 环境...")
