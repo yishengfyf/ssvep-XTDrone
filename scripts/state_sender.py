@@ -17,7 +17,7 @@ import time
 
 # --- UDP 配置 ---
 # TODO: 您可以根据需要修改这里的IP和端口
-UDP_IP = "pc2"  # 发送到界面机，应是PC2的IP地址
+UDP_IP = "172.20.10.225"  # 发送到界面机，应是PC2的IP地址
 UDP_PORT = 20002      # 使用一个新的、未被占用的端口
 
 # 创建UDP Socket
@@ -45,7 +45,7 @@ def pose_callback(msg):
     ori_w = msg.pose.orientation.w
     
     # 打印到终端，方便调试
-    # print(f"无人机位姿 -> POS:({pos_x:.2f}, {pos_y:.2f}, {pos_z:.2f}), ORI:({ori_x:.2f}, {ori_y:.2f}, {ori_z:.2f}, {ori_w:.2f})")
+    print(f"无人机位姿 -> POS:({pos_x:.2f}, {pos_y:.2f}, {pos_z:.2f}), ORI:({ori_x:.2f}, {ori_y:.2f}, {ori_z:.2f}, {ori_w:.2f})")
     
     # 2. 将数据打包成字节序列
     # '7f' 表示7个float类型的数据 (4字节浮点数)

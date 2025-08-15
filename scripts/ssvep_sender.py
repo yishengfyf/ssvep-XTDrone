@@ -92,7 +92,7 @@ class SimpleCCA:
 # ==============================================================================
 
 # --- 1. 参数配置 ---
-BCI_BASE_PATH = '~/XTDrone/bci'
+BCI_BASE_PATH = '~/XTDrone/bci/ssvep-XTDrone-k'
 DATASET_PATH = os.path.expanduser(os.path.join(BCI_BASE_PATH, 'data'))
 SUBJECT_FILENAME = 's3.mat' 
 

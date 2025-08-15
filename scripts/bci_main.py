@@ -53,8 +53,8 @@ except FileNotFoundError:
     font_stimulus = pygame.font.SysFont("arial", 36)
     font_feedback = pygame.font.SysFont("arial", 52)
 
-# --- 数据集与解码参数 ---
-DATASET_PATH = os.path.expanduser('~/XTDrone/bci/data')
+# --- 数据集与解码参数 注意数据路径---
+DATASET_PATH = os.path.expanduser('~/XTDrone/bci/ssvep-XTDrone-k/data')
 SUBJECT_FILENAME = 's1.mat' 
 SAMPLING_RATE = 256
 ALL_FREQS_IN_DATASET = [9.25, 11.25, 13.25, 9.75, 11.75, 13.75, 10.25, 12.25, 14.25, 10.75, 12.75, 14.75]
@@ -70,7 +70,7 @@ COMMAND_DESC = {
 
 WINDOW_LENGTH = 1.0
 N_HARMONICS = 5
-NUC2_IP = "nuc2"
+NUC2_IP = "172.20.10.108"
 BUDP_PORT = 20001
 
 # --- 刺激块数据与布局 ---

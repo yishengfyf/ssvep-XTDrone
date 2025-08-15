@@ -22,9 +22,9 @@ if __name__ == "__main__":
 
         ("cd ~/XTDrone/communication && python3 multirotor_communication.py iris 0", 2.0),
 
-        ("cd ~/XTDrone/bci/scripts && python3 budp_controller.py iris vel", 2.0),
+        ("cd ~/XTDrone/bci/ssvep-XTDrone-k/scripts && python3 budp_controller.py iris vel", 2.0),
 
-        ("cd ~/XTDrone/bci/scripts && python3 state_sender.py", 0.0)
+        ("cd ~/XTDrone/bci/ssvep-XTDrone-k/scripts && python3 state_sender.py", 0.0)
     ]
 
     print("🚀 正在启动 NUC2 (主机) 环境...")

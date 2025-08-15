@@ -6,38 +6,47 @@
 
 系统的核心特色是采用了“**数字孪生**”的概念，通过UDP通讯将仿真与控制分离，实现了两个独立的运行环境：
 
-  * **主机 (Host / NUC2)**: 模拟真实无人机，它在一个独立的仿真环境中根据接收到的外部脑控指令进行物理飞行，并实时通过UDP广播自身的位姿状态。
-  * **用户端 (Puppet / PC2)**: 负责生成SSVEP视觉刺激界面，并通过回放真实的脑电数据进行解码，生成控制指令发送给主机。同时，它会接收主机发回的位姿数据，驱动一个无物理引擎的“木偶”无人机模型，为用户提供一个纯净、实时的视觉反馈。
+  * **主机 (Host / NUC2)**: 模拟真实无人机，它在一个独立的仿真环境XRDrone中根据接收到的外部脑控指令进行物理飞行，并实时通过UDP广播自身的位姿状态。
+  * **用户端 (Puppet / PC2)**: 负责生成SSVEP视觉刺激界面; 并通过回放真实的脑电数据，并进行实时解码；若解码错误在终端进行显示，若解码成功在刺激界面显示解码出来的动作指令，并将生成控制指令通过UDP发送给主机。同时，它会监听接收主机发回的位姿数据，基于实时反馈的位姿数据来驱动一个无物理引擎的“木偶”无人机模型，为用户提供一个纯净、实时的可视化控制结果的反馈。
 
 整个系统通过自定义的**BUDP(Bci UDP)协议**进行控制指令的传输，并通过独立的UDP通道进行位姿数据的反馈，构成了一个完整的“**刺激-采集-解码-控制-反馈**”闭环。
+
+该系统运行有两种部署方式：一种是同一台电脑，利用docker部署两个container，分别对应Host/NUC2和Puppet/PC2；另一种是在两台主机进行部署。该系统提供了一种基于BCI脑电指令的无人机控制系统的科研平台，可以高效验证基于真实SSVEP脑电信号控制的无人机的整个pipeline。
+
+未来，可进一步接入实时采集的SSVEP脑电信号和解码算法，实现真实系统的搭建。
 
 ## 2\. 代码结构
 
 ```
 XTDrone/
-└── bci/
-    ├── data/                     # 存放SSVEP数据集文件
-    ├── launchers/
-    │   ├── host_launcher.py      # 主机端(NUC2)的一键启动器
-    │   ├── bci_launcher.py       # 用户端(PC2)的一键启动器
-    │   └── test/                 # 存放各类测试脚本
-    └── scripts/
-        ├── budp_controller.py    # 【主机核心】接收BUDP指令并控制无人机
-        ├── state_sender.py       # 【主机核心】订阅无人机位姿并通过UDP发送
-        ├── bci_main.py           # 【用户端核心】SSVEP界面、脑电回放、解码与指令发送
-        ├── pose_updater.py       # 【用户端核心】接收UDP位姿并更新木偶无人机
-        ├── budp_sender.py        # BUDP指令发送器的类定义
-        ├── ssvep_sender.py       # SSVEP刺激信号生成器的类定义
-        └── test/                 # 存放各类测试脚本
+└── bci/                              # BCI脑机接口的相关项目
+	└── ssvep-XTDrone-k/              # 脑控无人机仿真pipeline项目：git clone到bci下的默认文件夹名称：与仓库名称相同
+    	├── data/                     # 存放SSVEP数据集文件
+    	├── launchers/
+    	│   ├── host_launcher.py      # 主机端(NUC2)的一键启动器
+        │   ├── bci_launcher.py       # 用户端(PC2)的一键启动器
+        │   └── test/                 # 存放各类测试脚本
+        └── scripts/
+            ├── budp_controller.py    # 【主机核心】接收BUDP指令并控制无人机
+            ├── state_sender.py       # 【主机核心】订阅无人机位姿并通过UDP发送
+            ├── bci_main.py           # 【用户端核心】SSVEP界面、脑电回放、解码与指令发送
+            ├── pose_updater.py       # 【用户端核心】接收UDP位姿并更新木偶无人机
+            ├── budp_sender.py        # BUDP指令发送器的类定义
+            ├── ssvep_sender.py       # SSVEP刺激信号生成器的类定义
+            └── test/                 # 存放各类测试脚本
 ```
 
 ## 3\. 使用指南
 
-本指南提供两种测试模式：**A) 单机双容器测试** 和 **B) 双物理机部署**。在使用时，请将仓库克隆到**新建的/XTDrone/bci目录**下，并将项目内的**outdoor3_visualizer.launch**文件剪贴至/PX4_Firmware/launch目录下，同时确保/PX4_Firmware与/XTDrone处于**同一层级**。
+本指南提供两种测试模式：**A) 单机双容器测试** 和 **B) 双物理机部署**。
+
+- 请在NUC2和PC2上，分别将仓库克隆到**新建的/XTDrone/bci目录**下；注意bci/下会默认生成一个与仓库同名的文件夹，用于代码的git管理，建议保留。
+- 并将项目内的**outdoor3_visualizer.launch**文件剪贴至/PX4_Firmware/launch目录下；
+- 同时确保/PX4_Firmware与/XTDrone处于**同一层级**。
 
 -----
 
-### **A) 单机双容器测试指南**
+### **A. 机双容器测试指南**
 
 此模式适用于在单台电脑上完整地模拟整个系统。
 
@@ -95,12 +104,12 @@ XTDrone/
     ```
 3.  **终端3**: 启动BUDP指令接收器
     ```bash
-    cd ~/XTDrone/bci/scripts/
+    cd ~/XTDrone/bci/ssvep-XTDrone-k/scripts/
     python3 budp_controller.py iris vel
     ```
 4.  **终端4**: 启动位姿状态发送器
     ```bash
-    cd ~/XTDrone/bci/scripts/
+    cd ~/XTDrone/bci/ssvep-XTDrone-k/scripts/
     python3 state_sender.py
     ```
 
@@ -114,37 +123,66 @@ XTDrone/
     ```
 2.  **终端6**: 启动姿态更新器
     ```bash
-    cd ~/XTDrone/bci/scripts/
+    cd ~/XTDrone/bci/ssvep-XTDrone-k/scripts/
     python3 pose_updater.py
     ```
 3.  **终端7**: 启动BCI主控程序
     ```bash
-    cd ~/XTDrone/bci/scripts/
+    cd ~/XTDrone/bci/ssvep-XTDrone-k/scripts/
     python3 bci_main.py
     ```
 
 -----
 
-### **B) 双物理机部署指南**
+### **B). 双物理机部署指南**
 
-此模式是项目的理想运行状态，完全模拟真实场景。
+此模式是项目的理想运行状态，完全模拟真实场景。目前已在两台电脑上进行联合运行测试：
+
+  * **主机 (Host / NUC2)**: NUC主机，Ubuntu 20.04 , ROS Noetic
+  * **用户端 (Puppet / PC2)**:  服务器主机，Ubuntu 20.04, ROS Noetic
 
 #### **B.1 环境准备**
 
 1.  **两台电脑**:
+    
       * **主机 (NUC2)**: 用于运行无人机物理仿真。
       * **用户端 (PC2)**: 用于运行SSVEP界面和可视化。
-2.  **网络连接**: 确保两台电脑连接在**同一个局域网**下（例如，连接到同一个路由器或WiFi）。
-3.  **环境安装**: 在**两台电脑**上，都需要按照XTDrone平台提供的安装教程，配置好ROS 1 Noetic, Gazebo, PX4以及所有依赖。
+    
+2. **网络连接**: 确保两台电脑连接在**同一个局域网**下（例如，连接到同一个路由器或WiFi）。
+
+3. **环境安装**: 在**两台电脑**上，都需要按照XTDrone平台提供的安装教程，配置好ROS 1 Noetic, Gazebo, PX4以及所有依赖。
+
+   参考安装PX4 1.13版对应的XTDrone：https://www.yuque.com/xtdrone/manual_cn/basic_config_13
+
 4.  **获取IP地址**:
+    
       * 在主机(NUC2)的终端里运行`ifconfig`或`ip addr`，记下其IP地址（例如`192.168.1.100`）。
       * 在用户端(PC2)的终端里运行`ifconfig`或`ip addr`，记下其IP地址（例如`192.168.1.101`）。
+
+​	5 **获防火墙设置**:
+
+​		-  Ubuntu默认防火墙（ufw）可能阻塞UDP：运行：
+
+```
+sudo ufw allow 20002/udp
+sudo ufw reload
+```
+
+​		- 确认防火墙状态：
+
+```
+sudo ufw status
+```
+
+
+
+## B.2 关键代码配置（IP地址）
 
 #### **B.2 关键代码配置（IP地址）**
 
 1.  **配置`state_sender.py`**
 
-      * 在**主机 (NUC2)** 上，编辑`~/XTDrone/bci/scripts/state_sender.py`。
+      * 在**主机 (NUC2)** 上，编辑`~/XTDrone/bci/ssvep-XTDrone-k/scripts/state_sender.py`。
       * 将`UDP_IP`变量修改为**用户端 (PC2)** 的真实IP地址：
         ```python
         UDP_IP = "192.168.1.101" # <- 这里替换成PC2的IP
@@ -152,7 +190,7 @@ XTDrone/
 
 2.  **配置`bci_main.py`**
 
-      * 在**用户端 (PC2)** 上，编辑`~/XTDrone/bci/scripts/bci_main.py`。
+      * 在**用户端 (PC2)** 上，编辑`~/XTDrone/bci/ssvep-XTDrone-k/scripts/bci_main.py`。
       * 将`NUC2_IP`变量修改为**主机 (NUC2)** 的真实IP地址：
         ```python
         NUC2_IP = "192.168.1.100" # <- 这里替换成NUC2的IP
@@ -164,7 +202,7 @@ XTDrone/
 
   * 打开一个终端，运行主机的一键启动器：
     ```bash
-    cd ~/XTDrone/bci/launchers/
+    cd ~/XTDrone/bci/ssvep-XTDrone-k/launchers/
     python3 host_launcher.py
     ```
 
@@ -172,7 +210,7 @@ XTDrone/
 
   * 打开一个终端，运行用户端的一键启动器：
     ```bash
-    cd ~/XTDrone/bci/launchers/
+    cd ~/XTDrone/bci/ssvep-XTDrone-k/launchers/
     python3 bci_launcher.py
     ```
 
