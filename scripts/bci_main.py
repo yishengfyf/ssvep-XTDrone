@@ -70,7 +70,7 @@ COMMAND_DESC = {
 
 WINDOW_LENGTH = 1.0
 N_HARMONICS = 5
-NUC2_IP = "nuc2"
+NUC2_IP = "172.20.10.108"
 BUDP_PORT = 20001
 
 # --- 刺激块数据与布局 ---
