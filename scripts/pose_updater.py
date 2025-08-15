@@ -20,8 +20,8 @@ import threading
 import time
 
 # --- UDP 配置 ---
-# TODO: 确保这里的端口和 state_sender.py 中的一致
-UDP_IP = "0.0.0.0" # 监听所有端口（可以根据需要修改为hostIP）
+# TODO: 注意配置为 PC2 的本地接口地址或通配地址0.0.0.0，以允许接收来自任何发送端（包括 NUC2）的 UDP 数据包
+UDP_IP = "0.0.0.0" # 设置监听端口（可以根据需要修改为PC2IP的IP地址）
 UDP_PORT = 20002
 
 # --- 全局变量 ---
